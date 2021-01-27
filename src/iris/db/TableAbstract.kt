@@ -14,6 +14,10 @@ abstract class TableAbstract<T>(val table: String, val factory: SqlFactory<T>, v
 		return factory.creator(id)
 	}
 
+	override fun selectOne(): T? {
+		return selectOne(where = null as String?)
+	}
+
 	override fun selectOne(fields: QueryPart, where: QueryPart?, order: QueryPart?, start: Int): T? {
 		return driver.singleSelect(QuerySelect(table, fields, order, start, 1, where), creator(fields) )
 	}

@@ -11,6 +11,7 @@ import java.util.*
 fun main() {
 	TestUtil.init()
 	Database.setConnectionSource(ConnectionSourceSingle(TestUtil.properties.getProperty("connection-url")))
+	GlobalSqlDriver.debug = true
 	testDao()
 }
 
@@ -110,17 +111,3 @@ fun testDao() {
 		true
 	}
 }
-
-/*
-inline fun <T>lazy(item: T?, buildItem: () -> T): T {
-	return item ?: buildItem()
-}
-
-inline fun <T>lazy(item: T?, lock: Any, buildItem: () -> T): T {
-	if (item != null)
-		return item
-	synchronized(lock) {
-		if (item != null) return item
-		return buildItem()
-	}
-}*/

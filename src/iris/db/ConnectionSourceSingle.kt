@@ -12,6 +12,7 @@ class ConnectionSourceSingle(
 	private var host: String,
 	private var user: String? = null,
 	private var password: String? = null,
+	private var databaseName: String? = null
 
 ) : ConnectionSource {
 
@@ -20,16 +21,18 @@ class ConnectionSourceSingle(
 	init {
 		reconnect()
 	}
-	fun connect(host: String, user: String? = null, password: String? = null) {
+	fun connect(host: String, user: String? = null, password: String? = null, databaseName: String? = null) {
 		this.host = host
 		this.user = user
 		this.password = password
+		this.databaseName = databaseName
 		reconnect()
 	}
 
 	private fun reconnect() {
 		connection?.close()
 		connection = DriverManager.getConnection(host, user, password)
+		databaseName?.let { connection!!.createStatement().execute("USE $it") }
 	}
 
 	override fun getConnection(): Connection {

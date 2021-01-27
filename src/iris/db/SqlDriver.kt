@@ -7,7 +7,8 @@ import java.sql.*
 
 
 class SqlDriver(
-	private val connectionSource: ConnectionSource = Database
+	private val connectionSource: ConnectionSource = Database,
+	var debug: Boolean = false,
 ) {
 
 	fun <T>multiSelectWalk(query: Query, creator: Creator<T>, processor: (item: T?) -> Boolean) {
@@ -16,6 +17,8 @@ class SqlDriver(
 
 	fun <T>multiSelectWalk(query: String, creator: Creator<T>, processor: (item: T?) -> Boolean) {
 		return statement {
+			if (debug)
+				println("SqlDriver.multiSelectWalk: QUERY $query")
 			val res = it.executeQuery(query)
 			if (!res.next())
 				return@statement
@@ -33,6 +36,8 @@ class SqlDriver(
 
 	fun <T>multiSelect(query: String, creator: Creator<T>): List<T> {
 		return statement {
+			if (debug)
+				println("SqlDriver.multiSelect: QUERY $query")
 			val res = it.executeQuery(query)
 			if (!res.next())
 				return@statement emptyList()
@@ -51,6 +56,8 @@ class SqlDriver(
 	fun <T>singleSelect(query: String, creator: Creator<T>): T? {
 		return statement {
 			try {
+				if (debug)
+					println("SqlDriver.singleSelect: QUERY $query")
 				val res = it.executeQuery(query)
 				if (!res.next())
 					return@statement null
@@ -65,6 +72,8 @@ class SqlDriver(
 	fun saveQuery(query: String) : Number {
 		return statement {
 			try {
+				if (debug)
+					println("SqlDriver.saveQuery: QUERY $query")
 				it.execute(query, Statement.RETURN_GENERATED_KEYS)
 			} catch (e: Exception) {
 				println(query)
@@ -81,6 +90,8 @@ class SqlDriver(
 
 	fun saveOrAffectQuery(sql: String) : SaveOrAffect {
 		return statement {
+			if (debug)
+				println("SqlDriver.saveOrAffectQuery: QUERY $sql")
 			val affected = it.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS)
 			val rs = it.resultSet
 			if (rs == null || !rs.next())

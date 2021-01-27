@@ -152,7 +152,6 @@ class JoinTableBuilder(firstTable: JoinTable<*>, alias: String = "t") {
 		if (amount != 0) {
 			sb.append("\nLIMIT ").append(start).append(", ").append(amount)
 		}
-		println(sb)
 		return GlobalSqlDriver.multiSelect(sb.toString(), cacheCreator)
 	}
 
@@ -163,7 +162,6 @@ class JoinTableBuilder(firstTable: JoinTable<*>, alias: String = "t") {
 		if (amount != 0) {
 			sb.append(" LIMIT ").append(start).append(", ").append(amount)
 		}
-		println(sb)
 		return GlobalSqlDriver.multiSelect(sb.toString(), cacheCreator)
 	}
 

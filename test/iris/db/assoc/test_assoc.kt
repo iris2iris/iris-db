@@ -2,6 +2,7 @@ package iris.db.assoc
 
 import iris.db.ConnectionSourceSingle
 import iris.db.Database
+import iris.db.GlobalSqlDriver
 import iris.db.TestUtil
 
 /**
@@ -12,7 +13,8 @@ import iris.db.TestUtil
 fun main() {
 	TestUtil.init()
 	Database.setConnectionSource(ConnectionSourceSingle(TestUtil.properties.getProperty("connection-url")))
-	joinTest()
+	GlobalSqlDriver.debug = true
+	test()
 }
 
 object UsersIn: AssociativeTable("cm_user_in") {
@@ -32,47 +34,66 @@ object Bans: AssociativeTable("cm_chat_bans") {
 	}
 }
 
-fun joinTest() {
-	val users = (
-		Bans.joinBuilder().fields("id_user", "id_moderator", "dateAdd")
-		leftJoin UsersIn
-		leftJoin Users fields listOf("id_user", "domain")
-		leftJoin Users on "id_moderator" fields listOf("domain")
-	).selectList(where = "t.id_user > 1", order = "t.id_user ASC", start = 0, amount = 10)
-
-	users.forEach{
-		val (ban, isIn, user, moderator) = it
-		println('[')
-		println("\tBan: $ban")
-		println("\tUser: $user")
-		println("\tIs in: $isIn")
-		println("\tModerator: $moderator")
-		println(']')
-	}
-
-}
-
-	//val users = (UsersIn leftJoin Users leftJoin Users).selectList()
-	//val users = (UsersIn leftJoin Users leftJoin Users).selectList()
-	//println(users)
-//}
-
 fun test() {
 
-	val user = Users.get(1)
-	println(user)
+	run {
+		val user = Users.get(1)
+		println(user)
+		println("---------------\n")
+	}
 
-/*	val items = Users.getMulti(fields = "first_name, last_name", condition = "id_user < 1000 AND id_user > 0")
-	items.forEach { println(it) }*/
+	run {
+		val user = Users.selectOne()
+		println(user)
+		println("---------------\n")
+	}
 
-	val items = Users.getByIdList(listOf(2))
-	Users.factory.alias("a")
-	println(items)
-	/*val res = Users.saveItems(listOf(
-		mapOf("first_name" to "Name", "last_name" to "Naname", "id_user" to 1),
-		mapOf("first_name" to "Name2", "last_name" to "Naname2", "id_user" to 2)
-	))
-	println(res)*/
+	run {
+		val items = Users.selectList(fields = "id_user, first_name, last_name", where = "id_user < 100000 AND id_user > 0", amount = 10)
+		items.forEach(::println)
+		println("---------------\n")
+	}
 
+	run {
+		val items = Users.getByIdList(listOf(1, 2))
+		Users.factory.alias("a")
+		items.forEach(::println)
+		println("---------------\n")
+	}
+
+	run {
+		val res = Users.removeByIdList(listOf(1, 2))
+		println(res)
+		println("---------------\n")
+	}
+
+	run {
+		val res = Users.saveItems(listOf(
+			mapOf("first_name" to "Name", "last_name" to "Naname", "id_user" to 1),
+			mapOf("first_name" to "Name2", "last_name" to "Naname2", "id_user" to 2)
+		))
+		println(res)
+		println("---------------\n")
+	}
+
+	run {
+		val users = (
+		Bans.joinBuilder().fields("id_user", "id_moderator", "dateAdd")
+				leftJoin UsersIn
+				leftJoin Users fields listOf("id_user", "domain")
+				leftJoin Users on "id_moderator" fields listOf("domain")
+		).selectList(where = "t.id_user > 1", order = "t.id_user ASC", start = 0, amount = 10)
+
+		users.forEach{
+			val (ban, isIn, user, moderator) = it
+			println('[')
+			println("\tBan: $ban")
+			println("\tUser: $user")
+			println("\tIs in: $isIn")
+			println("\tModerator: $moderator")
+			println(']')
+		}
+		println("---------------\n")
+	}
 
 }

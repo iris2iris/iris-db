@@ -8,6 +8,8 @@ import iris.db.QuerySelect.QueryPart
  */
 interface Table<T> {
 
+	fun selectOne(): T?
+
 	fun selectOne(fields: QueryPart = QuerySelect.allFields, where: QueryPart? = null, order: QueryPart? = null, start: Int = 0): T?
 
 	fun selectOne(fields: String = "*", where: String? = null, order: String? = null, start: Int = 0): T?
