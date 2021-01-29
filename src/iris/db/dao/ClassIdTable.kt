@@ -1,7 +1,6 @@
 package iris.db.dao
 
 import iris.db.*
-import iris.db.assoc.AssociativeTable
 import iris.util.plus
 import kotlin.reflect.KClass
 
@@ -9,9 +8,9 @@ import kotlin.reflect.KClass
  * @created 27.01.2021
  * @author [Ivan Ivanov](https://vk.com/irisism)
  */
-open class ClassIdTable<K, T : Any> private constructor(table: String, factory: ClassIdFactory<K, T>, driver: SqlDriver = GlobalSqlDriver) : ClassTable<T>(table, factory, driver), TableId<K, T>, TableIdPart<K, T> by TableIdAbstract<K, T>(table, factory, driver) {
-	constructor(clazz: KClass<T>, data: Data, driver: SqlDriver = GlobalSqlDriver) : this(data.table, ClassIdFactory(clazz, data.properties), driver)
-	constructor(clazz: KClass<T>, driver: SqlDriver = GlobalSqlDriver) : this(clazz, buildData(clazz), driver)
+open class ClassIdTable<K, T : Any> private constructor(table: String, factory: ClassIdFactory<K, T>, driver: SqlDriver = DefaultSqlDriver) : ClassTable<T>(table, factory, driver), TableId<K, T>, TableIdPart<K, T> by TableIdAbstract<K, T>(table, factory, driver) {
+	constructor(clazz: KClass<T>, data: Data, driver: SqlDriver = DefaultSqlDriver) : this(data.table, ClassIdFactory(clazz, data.properties), driver)
+	constructor(clazz: KClass<T>, driver: SqlDriver = DefaultSqlDriver) : this(clazz, buildData(clazz), driver)
 
 	internal class ClassIdFactory<K, T: Any>(clazz: KClass<T>, properties: Array<ClassField>, fields: List<SqlColumn> = properties.map { it.column }, alias: String? = null) : ClassFactory<T>(clazz, properties, fields, alias),
 		SqlIdFactory<K, T> {

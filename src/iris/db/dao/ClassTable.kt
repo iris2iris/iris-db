@@ -11,10 +11,10 @@ import kotlin.reflect.full.primaryConstructor
  * @created 23.01.2021
  * @author [Ivan Ivanov](https://vk.com/irisism)
  */
-open class ClassTable<T: Any>(table: String, factory: ClassFactory<T>, driver: SqlDriver = GlobalSqlDriver) : TableAbstract<T>(table, factory, driver), JoinTable<T> by JoinTableDelegate<T>(table, factory, factory.fields, factory.primary) {
+open class ClassTable<T: Any>(table: String, factory: ClassFactory<T>, driver: SqlDriver = DefaultSqlDriver) : TableAbstract<T>(table, factory, driver), JoinTable<T> by JoinTableDelegate<T>(table, factory, factory.fields, factory.primary) {
 
-	constructor(clazz: KClass<T>, data: Data, driver: SqlDriver = GlobalSqlDriver) : this(data.table, ClassFactory(clazz, data.properties), driver)
-	constructor(clazz: KClass<T>, driver: SqlDriver = GlobalSqlDriver) : this(clazz, buildData(clazz), driver)
+	constructor(clazz: KClass<T>, data: Data, driver: SqlDriver = DefaultSqlDriver) : this(data.table, ClassFactory(clazz, data.properties), driver)
+	constructor(clazz: KClass<T>, driver: SqlDriver = DefaultSqlDriver) : this(clazz, buildData(clazz), driver)
 
 	class Data(val table: String, val properties: Array<ClassField>)
 

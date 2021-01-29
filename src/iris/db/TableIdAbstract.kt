@@ -6,7 +6,7 @@ import iris.util.plus
  * @created 13.01.2021
  * @author [Ivan Ivanov](https://vk.com/irisism)
  */
-open class TableIdAbstract<K, T>(table: String, factory: SqlIdFactory<K, T>, driver: SqlDriver = GlobalSqlDriver) : TableAbstract<T>(table, factory, driver),
+open class TableIdAbstract<K, T>(table: String, factory: SqlIdFactory<K, T>, driver: SqlDriver = DefaultSqlDriver) : TableAbstract<T>(table, factory, driver),
 	TableId<K, T> {
 	private val idFactory = factory
 

@@ -8,7 +8,7 @@ import iris.util.plus
  * @author [Ivan Ivanov](https://vk.com/irisism)
  */
 
-abstract class TableAbstract<T>(val table: String, val factory: SqlFactory<T>, val driver: SqlDriver = GlobalSqlDriver) : Table<T> {
+abstract class TableAbstract<T>(val table: String, val factory: SqlFactory<T>, val driver: SqlDriver = DefaultSqlDriver) : Table<T> {
 
 	override fun creator(id: Any?): Creator<T> {
 		return factory.creator(id)

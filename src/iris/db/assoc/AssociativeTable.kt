@@ -13,11 +13,11 @@ open class AssociativeTable(
 	val fields: List<SqlColumn>,
 	private val primary: List<SqlColumn> = fields.filter { it.isPrimary },
 	factory: SqlFactory<Map<String, Any?>>,
-	driver: SqlDriver = GlobalSqlDriver,
+	driver: SqlDriver = DefaultSqlDriver,
 ) : TableAbstract<Map<String, Any?>>(table, factory, driver), JoinTable<Map<String, Any?>> by JoinTableDelegate(table, factory, fields, primary) {
 
-	constructor(table: String, fields: List<SqlColumn>, primary: List<SqlColumn> = fields.filter { it.isPrimary }, driver: SqlDriver = GlobalSqlDriver) : this(table, fields, primary, AssociativeFactory(null, fields, primary), driver)
-	constructor(table: String, driver: SqlDriver = GlobalSqlDriver) : this(table, buildFields(table, driver), driver = driver)
+	constructor(table: String, fields: List<SqlColumn>, primary: List<SqlColumn> = fields.filter { it.isPrimary }, driver: SqlDriver = DefaultSqlDriver) : this(table, fields, primary, AssociativeFactory(null, fields, primary), driver)
+	constructor(table: String, driver: SqlDriver = DefaultSqlDriver) : this(table, buildFields(table, driver), driver = driver)
 
 	companion object {
 

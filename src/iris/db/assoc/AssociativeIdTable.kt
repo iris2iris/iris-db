@@ -7,14 +7,14 @@ import iris.util.plus
  * @created 06.01.2020
  * @author [Ivan Ivanov](https://vk.com/irisism)
  */
-open class AssociativeIdTable<K>(table: String, private val fields: List<SqlColumn>, factory: SqlIdFactory<K, Map<String, Any?>>, driver: SqlDriver = GlobalSqlDriver) : TableIdAbstract<K, Map<String, Any?>>(table, factory, driver), JoinTable<Map<String, Any?>> by JoinTableDelegate(
+open class AssociativeIdTable<K>(table: String, private val fields: List<SqlColumn>, factory: SqlIdFactory<K, Map<String, Any?>>, driver: SqlDriver = DefaultSqlDriver) : TableIdAbstract<K, Map<String, Any?>>(table, factory, driver), JoinTable<Map<String, Any?>> by JoinTableDelegate(
 	table,
 	factory,
 	fields
 ) {
 
-	constructor(table: String, alias: String? = null, fields: List<SqlColumn>, driver: SqlDriver = GlobalSqlDriver) : this(table, fields, AssociativeIdFactory<K>(alias, fields), driver)
-	constructor(table: String, alias: String? = null, driver: SqlDriver = GlobalSqlDriver) : this(table, alias,
+	constructor(table: String, alias: String? = null, fields: List<SqlColumn>, driver: SqlDriver = DefaultSqlDriver) : this(table, fields, AssociativeIdFactory<K>(alias, fields), driver)
+	constructor(table: String, alias: String? = null, driver: SqlDriver = DefaultSqlDriver) : this(table, alias,
 		AssociativeTable.buildFields(table, driver), driver)
 
 	private val primary = fields.filter { it.isPrimary }

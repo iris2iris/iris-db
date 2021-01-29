@@ -152,7 +152,7 @@ class JoinTableBuilder(firstTable: JoinTable<*>, alias: String = "t") {
 		if (amount != 0) {
 			sb.append("\nLIMIT ").append(start).append(", ").append(amount)
 		}
-		return GlobalSqlDriver.multiSelect(sb.toString(), cacheCreator)
+		return DefaultSqlDriver.multiSelect(sb.toString(), cacheCreator)
 	}
 
 	fun selectList(where: QuerySelect.QueryPart? = null, order: QuerySelect.QueryPart? = null, start: Int = 0, amount: Int = 0): List<Array<*>> {
@@ -162,7 +162,7 @@ class JoinTableBuilder(firstTable: JoinTable<*>, alias: String = "t") {
 		if (amount != 0) {
 			sb.append(" LIMIT ").append(start).append(", ").append(amount)
 		}
-		return GlobalSqlDriver.multiSelect(sb.toString(), cacheCreator)
+		return DefaultSqlDriver.multiSelect(sb.toString(), cacheCreator)
 	}
 
 	fun walkList(processor: (Array<*>?) -> Boolean) {
@@ -177,7 +177,7 @@ class JoinTableBuilder(firstTable: JoinTable<*>, alias: String = "t") {
 			sb.append(" LIMIT ").append(start).append(", ").append(amount)
 		}
 		println(sb)
-		return GlobalSqlDriver.multiSelectWalk(sb.toString(), cacheCreator, processor)
+		return DefaultSqlDriver.multiSelectWalk(sb.toString(), cacheCreator, processor)
 	}
 
 	fun walkList(where: String? = null, order: String? = null, start: Int = 0, amount: Int = 0, processor: (Array<*>?) -> Boolean) {
@@ -188,7 +188,7 @@ class JoinTableBuilder(firstTable: JoinTable<*>, alias: String = "t") {
 			sb.append("\nLIMIT ").append(start).append(", ").append(amount)
 		}
 		println(sb)
-		GlobalSqlDriver.multiSelectWalk(sb.toString(), cacheCreator, processor)
+		DefaultSqlDriver.multiSelectWalk(sb.toString(), cacheCreator, processor)
 	}
 
 	fun selectOne(): Array<*>? {
@@ -201,7 +201,7 @@ class JoinTableBuilder(firstTable: JoinTable<*>, alias: String = "t") {
 		order?.apply { sb.append(" ORDER BY "); joinTo(sb) }
 		sb.append("\nLIMIT ").append(start).append(", 1")
 		println(sb)
-		return GlobalSqlDriver.singleSelect(sb.toString(), cacheCreator)
+		return DefaultSqlDriver.singleSelect(sb.toString(), cacheCreator)
 	}
 
 	fun selectOne(where: String? = null, order: String? = null, start: Int = 0): Array<*>? {
@@ -210,7 +210,7 @@ class JoinTableBuilder(firstTable: JoinTable<*>, alias: String = "t") {
 		order?.apply { sb.append("\nORDER BY ") + this }
 		sb.append("\nLIMIT ").append(start).append(", 1")
 		println(sb)
-		return GlobalSqlDriver.singleSelect(sb.toString(), cacheCreator)
+		return DefaultSqlDriver.singleSelect(sb.toString(), cacheCreator)
 	}
 
 	private class MultiCreator(private val creators: Array<Creator<Any?>>) : Creator<Array<*>> {
